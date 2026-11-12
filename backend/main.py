@@ -57,3 +57,4 @@ def health() -> dict[str, str]:
 
 for route_module in (courses, chapters, deadlines, availability, documents, planning):
     app.include_router(route_module.router)
+app.include_router(planning.calendar_router)

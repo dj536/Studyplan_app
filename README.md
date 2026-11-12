@@ -22,19 +22,30 @@ Ouvre PowerShell dans le dossier du projet (`Studyplan_app`), puis crée un envi
 py -m venv .venv
 ```
 
-Installe les dépendances du frontend :
+Installe les dépendances du backend et du frontend :
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install -r .\frontend\requirements.txt
+\.venv\Scripts\python.exe -m pip install -r .\requirements.txt
 ```
 
 L'environnement virtuel évite d'installer les bibliothèques de StudyPlan dans le reste de ton ordinateur.
 
-## Lancer le frontend
+## Lancer le backend
 
-Depuis la racine du projet, lance :
+Dans un premier terminal, depuis la racine du projet :
 
 ```powershell
+\.venv\Scripts\python.exe -m uvicorn backend.main:app --reload
+```
+
+L'API est disponible sur `http://127.0.0.1:8000` et sa documentation sur `http://127.0.0.1:8000/docs`.
+
+## Lancer le frontend
+
+Dans un deuxième terminal, depuis la racine du projet, connecte le frontend à l'API puis lance Streamlit :
+
+```powershell
+$env:STUDYPLAN_API_URL = "http://127.0.0.1:8000"
 .\.venv\Scripts\python.exe -m streamlit run .\frontend\app.py
 ```
 
@@ -44,10 +55,10 @@ Streamlit affiche une adresse locale dans PowerShell et ouvre normalement le nav
 
 Sans configuration supplémentaire, le frontend démarre en **mode démo** avec des données fictives. Ces données sont temporaires : elles ne sont pas sauvegardées dans une base de données et peuvent disparaître quand la session se termine.
 
-Pour connecter le frontend à un backend FastAPI déjà démarré, renseigne son adresse dans la même fenêtre PowerShell avant de lancer Streamlit. Exemple si le backend écoute sur le port 8000 :
+Pour lancer le frontend en mode démo avec des données fictives, retire la variable de connexion dans ce terminal avant de démarrer Streamlit :
 
 ```powershell
-$env:STUDYPLAN_API_URL = "http://127.0.0.1:8000"
+Remove-Item Env:STUDYPLAN_API_URL -ErrorAction SilentlyContinue
 .\.venv\Scripts\python.exe -m streamlit run .\frontend\app.py
 ```
 

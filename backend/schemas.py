@@ -84,7 +84,7 @@ class DeadlineCreate(InputModel):
     course_id: int = Field(gt=0)
     title: str = Field(min_length=1, max_length=255)
     type: Literal["exam", "assignment", "other"]
-    due_date: datetime
+    due_date: datetime = Field(strict=False)
     coefficient: float = Field(default=1.0, gt=0, allow_inf_nan=False)
 
 
@@ -92,7 +92,7 @@ class DeadlineUpdate(InputModel):
     course_id: int = Field(gt=0)
     title: str = Field(min_length=1, max_length=255)
     type: Literal["exam", "assignment", "other"]
-    due_date: datetime
+    due_date: datetime = Field(strict=False)
     coefficient: float = Field(gt=0, allow_inf_nan=False)
 
 
@@ -133,6 +133,12 @@ class StudySessionOut(OutputModel):
     chapter_id: int
     start_datetime: datetime
     end_datetime: datetime
+    status: Literal["planned", "done", "skipped"]
+
+
+class SessionStatusUpdate(InputModel):
+    """Request body for changing a study session's status."""
+
     status: Literal["planned", "done", "skipped"]
 
 
